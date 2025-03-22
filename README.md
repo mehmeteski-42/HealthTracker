@@ -39,7 +39,7 @@ CREATE TABLE medications (
 CREATE TABLE appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    name VARCHAR(100) NOT NULL, -- Doktor adı
+    doctor_name VARCHAR(100) NOT NULL, -- Doktor adı
     time TIME NOT NULL,
     departmant VARCHAR(255) NOT NULL, -- hangi bölümden(kulakburunbogaz vs)
     location VARCHAR(255) NOT NULL, -- hastanenin lokasyonu
