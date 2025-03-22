@@ -29,10 +29,25 @@ class LoginController extends Controller
             return back()->with('error', 'Kullanıcı adı veya şifre hatalı.');
         }
 
-        /* Auth::login($user); */
+        // Kullanıcı modelinin gerçekten Authenticatable olup olmadığını kontrol et
+        if (!$user instanceof \Illuminate\Contracts\Auth\Authenticatable) {
+            dd('HATA: Kullanıcı nesnesi geçerli değil!', $user);
+        }
+        else{
+            Auth::login($user);
 
-        // ... Oturum açma
-        $request->session()->regenerate();
+            // ... Oturum açma
+            $request->session()->regenerate();
+    
+            return redirect('/');    
+        }
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/');
     }

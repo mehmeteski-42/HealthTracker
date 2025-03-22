@@ -19,6 +19,8 @@ Route::post('/registerAccount', [RegisterController::class, 'store'])->name('reg
 
 Route::get('/loginAccount', [LoginController::class, 'create'])->name('loginAccount');
 Route::post('/loginAccount', [LoginController::class, 'log_in'])->name('loginAccount');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
