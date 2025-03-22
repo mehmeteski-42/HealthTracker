@@ -17,13 +17,13 @@ class RegisterController extends Controller
     {
         // Form doğrulama
         $request->validate([
-            'username' => 'required|string|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'name' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|confirmed',
         ]);
 
         // Kullanıcı oluşturma
         User::create([
-            'username' => $request->username,
+            'name' => $request->name,
             'password' => $request->password,
         ]);
 

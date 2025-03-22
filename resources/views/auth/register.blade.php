@@ -22,8 +22,8 @@
     <form action="{{ route('registerAccount') }}" method="POST">
         @csrf
         <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <label for="name">Username:</label>
+            <input type="text" id="name" name="name" required>
         </div>
         <div>
             <label for="password">Password:</label>
