@@ -1,5 +1,4 @@
 <?php
-// filepath: app/Http/Controllers/HomeController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

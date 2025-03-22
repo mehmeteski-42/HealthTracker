@@ -8,10 +8,10 @@
 </head>
 <body>
     <div class="container text-center mt-5">
-        <h1>Welcome to HealthTracker</h1>
+        <h1>Welcome to HealthTracASJKDHASKJDHAKDJker</h1>
         <p>Your health, our priority.</p>
         <a href="<?php echo e(route('login')); ?>" class="btn btn-primary">Login</a>
-        <a href="<?php echo e(route('registerAccount')); ?>" class="btn btn-secondary">Register</a>
+        <a href="<?php echo e(route('register')); ?>" class="btn btn-secondary">Register</a>
     </div>
 </body>
-</html><?php /**PATH C:\laragon\www\HealthTracker\resources\views/welcome.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\laragon\www\HealthTracker\resources\views/welcome2.blade.php ENDPATH**/ ?>

@@ -11,7 +11,7 @@
         <h1>Welcome to HealthTracker</h1>
         <p>Your health, our priority.</p>
         <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
-        <a href="{{ route('register') }}" class="btn btn-secondary">Register</a>
+        <a href="{{ route('registerAccount') }}" class="btn btn-secondary">Register</a>
     </div>
 </body>
 </html>
