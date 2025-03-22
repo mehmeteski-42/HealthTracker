@@ -41,6 +41,8 @@ CREATE TABLE appointments (
     user_id INT NOT NULL,
     name VARCHAR(100) NOT NULL, -- Doktor adı
     time TIME NOT NULL,
+    departmant VARCHAR(255) NOT NULL, -- hangi bölümden(kulakburunbogaz vs)
+    location VARCHAR(255) NOT NULL, -- hastanenin lokasyonu
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
