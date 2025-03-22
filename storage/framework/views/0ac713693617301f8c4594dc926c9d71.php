@@ -126,6 +126,26 @@
                 </div>
             </div>
 
+            <div class="container mt-5">
+                <h2>Su Tüketim Hesaplayıcı</h2>
+                <div class="card" style="width: 100%; max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <h4>Günlük Su Tüketimi</h4>
+                    <p>Ağırlığınızı girin ve günlük önerilen su miktarını hesaplayın.</p>
+                    <form id="waterCalculatorForm">
+                        <div class="form-group">
+                            <label for="weight">Ağırlık (kg)</label>
+                            <input type="number" id="weight" class="form-control" placeholder="Ağırlığınızı girin" min="1">
+                        </div>
+                        <div class="form-group mt-3">
+                            <button type="button" id="calculateWater" class="btn btn-primary">Hesapla</button>
+                        </div>
+                    </form>
+                    <div id="waterResult" class="mt-3" style="display: none;">
+                        <h5>Sonuç:</h5>
+                        <p id="waterAmount"></p>
+                    </div>
+                </div>
+            </div>
             
         <?php else: ?>
             <a href="<?php echo e(route('loginAccount')); ?>" class="btn btn-primary">Login</a>
@@ -232,6 +252,26 @@
                         console.error("Hata:", error);
                         alert("İlaç kaydedilirken bir hata oluştu.");
                     });
+            });
+
+            const calculateWaterBtn = document.getElementById("calculateWater");
+            const waterResultDiv = document.getElementById("waterResult");
+            const waterAmountText = document.getElementById("waterAmount");
+
+            calculateWaterBtn.addEventListener("click", function () {
+                const weight = document.getElementById("weight").value;
+
+                if (!weight || weight <= 0) {
+                    alert("Lütfen geçerli bir ağırlık girin.");
+                    return;
+                }
+
+                // Günlük su tüketimi hesaplama (kg başına 0.033 litre)
+                const waterIntake = (weight * 0.033).toFixed(2);
+
+                // Sonucu göster
+                waterAmountText.textContent = `Günlük önerilen su tüketimi: ${waterIntake} litre.`;
+                waterResultDiv.style.display = "block";
             });
         });
     </script>

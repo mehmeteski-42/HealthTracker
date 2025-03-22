@@ -55,3 +55,9 @@ CREATE TABLE fitness_logs (
 );
 
 3.Sonradan db güncellebilir.
+
+
+
+
+todo:
+ilaç modülü için ekstra attribute eklebilir not kısmı falan diye. düzenleebliir olmadlı ayriyetten
