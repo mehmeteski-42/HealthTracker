@@ -1,13 +1,13 @@
-<!-- filepath: c:\laragon\www\HealthTracker\resources\views\auth\register.blade.php -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Login</title>
 </head>
 <body>
-    <h1>Register</h1>
+    <h1>Login</h1>
 
     <?php if($errors->any()): ?>
         <div>
@@ -19,7 +19,7 @@
         </div>
     <?php endif; ?>
 
-    <form action="<?php echo e(route('registerAccount')); ?>" method="POST">
+    <form action="<?php echo e(route('loginAccount')); ?>" method="POST">
         <?php echo csrf_field(); ?>
         <div>
             <label for="name">Username:</label>
@@ -29,11 +29,7 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <div>
-            <label for="password_confirmation">Confirm Password:</label>
-            <input type="password" id="password_confirmation" name="password_confirmation" required>
-        </div>
-        <button type="submit">Register</button>
+        <button type="submit">Login</button>
     </form>
 </body>
-</html><?php /**PATH C:\laragon\www\HealthTracker\resources\views/auth/register.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\laragon\www\HealthTracker\resources\views/auth/login.blade.php ENDPATH**/ ?>

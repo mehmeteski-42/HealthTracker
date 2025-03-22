@@ -10,7 +10,7 @@
     <div class="container text-center mt-5">
         <h1>Welcome to HealthTracker</h1>
         <p>Your health, our priority.</p>
-        <a href="<?php echo e(route('login')); ?>" class="btn btn-primary">Login</a>
+        <a href="<?php echo e(route('loginAccount')); ?>" class="btn btn-primary">Login</a>
         <a href="<?php echo e(route('registerAccount')); ?>" class="btn btn-secondary">Register</a>
     </div>
 </body>
