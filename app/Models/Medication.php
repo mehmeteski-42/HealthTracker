@@ -13,7 +13,7 @@ class Medication extends Model
 
     public $timestamps = false;
     
-    protected $fillable = ['user_id', 'name', 'time'];
+    protected $fillable = ['user_id', 'name', 'time', 'additionalNotes'];
 
     public function user()
     {

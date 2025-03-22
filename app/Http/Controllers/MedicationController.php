@@ -15,6 +15,7 @@ class MedicationController extends Controller
         $request->validate([
             'medicationName' => 'required|string|max:100',
             'medicationTime' => 'required|date_format:H:i',
+            'additional_notes' => 'nullable|string|max:255',
         ]);
 
         // Randevuyu kaydet
@@ -22,6 +23,7 @@ class MedicationController extends Controller
             'user_id' => Auth::id(),
             'name' => $request->medicationName,
             'time' => $request->medicationTime,
+            'additional_notes' => $request->additional_notes,
         ]);
         
         //TODO

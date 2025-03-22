@@ -33,6 +33,7 @@ CREATE TABLE medications (
     user_id INT NOT NULL,
     name VARCHAR(100) NOT NULL,
     time TIME NOT NULL,
+    additional_notes VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
