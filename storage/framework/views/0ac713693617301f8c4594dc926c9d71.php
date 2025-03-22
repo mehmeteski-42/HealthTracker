@@ -30,6 +30,7 @@
                                 <th>Randevu Saati</th>
                                 <th>Bölüm</th>
                                 <th>Lokasyon</th>
+                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,6 +40,9 @@
                                     <td><?php echo e($appointment->time); ?></td>
                                     <td><?php echo e($appointment->departmant); ?></td>
                                     <td><?php echo e($appointment->location); ?></td>
+                                    <td>
+                                        <button class="btn btn-danger delete-appointment" data-id="<?php echo e($appointment->id); ?>">Sil</button>
+                                    </td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
@@ -88,6 +92,8 @@
                             <tr>
                                 <th>İlaç Adı</th>
                                 <th>Alınma Zamanı</th>
+                                <th>Detaylı Bilgi</th>
+                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,6 +101,10 @@
                                 <tr>
                                     <td><?php echo e($medication->name); ?></td>
                                     <td><?php echo e($medication->time); ?></td>
+                                    <td><?php echo e($medication->additional_notes); ?></td>
+                                    <td>
+                                        <button class="btn btn-danger delete-medication" data-id="<?php echo e($medication->id); ?>">Sil</button>
+                                    </td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
@@ -121,6 +131,10 @@
                             <label for="medicationTime">İlaç Saati</label>
                             <input type="time" id="medicationTime" class="form-control">
                         </div>
+                        <div class="form-group">
+                            <label for="additional_notes">Detaylı Bilgi</label>
+                            <input type="text" id="additional_notes" class="form-control" placeholder="Kullanım sıklığı, dozaj vb.">
+                        </div>
                         <button type="button" id="submitMedication" class="btn btn-success">Kaydet</button>
                     </form>
                 </div>
@@ -130,11 +144,27 @@
                 <h2>Su Tüketim Hesaplayıcı</h2>
                 <div class="card" style="width: 100%; max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                     <h4>Günlük Su Tüketimi</h4>
-                    <p>Ağırlığınızı girin ve günlük önerilen su miktarını hesaplayın.</p>
+                    <p>Boy, kilo, yaş ve aktivite seviyenizi girerek günlük önerilen su miktarını hesaplayın.</p>
                     <form id="waterCalculatorForm">
                         <div class="form-group">
-                            <label for="weight">Ağırlık (kg)</label>
-                            <input type="number" id="weight" class="form-control" placeholder="Ağırlığınızı girin" min="1">
+                            <label for="weight">Kilo (kg)</label>
+                            <input type="number" id="weight" class="form-control" placeholder="Kilonuzu girin" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Boy (cm)</label>
+                            <input type="number" id="height" class="form-control" placeholder="Boyunuzu girin" min="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Yaş</label>
+                            <input type="number" id="age" class="form-control" placeholder="Yaşınızı girin" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="activityLevel">Aktivite Seviyesi</label>
+                            <select id="activityLevel" class="form-control" required>
+                                <option value="low">Hafif</option>
+                                <option value="moderate">Orta</option>
+                                <option value="high">Yoğun</option>
+                            </select>
                         </div>
                         <div class="form-group mt-3">
                             <button type="button" id="calculateWater" class="btn btn-primary">Hesapla</button>
@@ -222,7 +252,7 @@
                     })
                     .catch((error) => {
                         console.error("Hata:", error);
-                        alert("Randevu kaydedilirken bir hata oluştu.");
+                        //alert("Randevu kaydedilirken bir hata oluştu.");
                     });
             });
 
@@ -230,6 +260,7 @@
             document.getElementById("submitMedication").addEventListener("click", function () {
                 const medicationName = document.getElementById("medicationName").value;
                 const medicationTime = document.getElementById("medicationTime").value;
+                const additional_notes = document.getElementById("additional_notes").value;
 
                 fetch("<?php echo e(route('medications.store')); ?>", {
                     method: "POST",
@@ -240,6 +271,7 @@
                     body: JSON.stringify({
                         medicationName: medicationName,
                         medicationTime: medicationTime,
+                        additional_notes: additional_notes,
                     }),
                 })
                     .then((response) => response.json())
@@ -250,7 +282,7 @@
                     })
                     .catch((error) => {
                         console.error("Hata:", error);
-                        alert("İlaç kaydedilirken bir hata oluştu.");
+                        //alert("İlaç kaydedilirken bir hata oluştu.");
                     });
             });
 
@@ -260,18 +292,82 @@
 
             calculateWaterBtn.addEventListener("click", function () {
                 const weight = document.getElementById("weight").value;
+                const height = document.getElementById("height").value;
+                const age = document.getElementById("age").value;
+                const activityLevel = document.getElementById("activityLevel").value;
 
-                if (!weight || weight <= 0) {
-                    alert("Lütfen geçerli bir ağırlık girin.");
+                if (!weight || weight <= 0 || !height || height <= 0 || !age || age <= 0) {
+                    alert("Lütfen geçerli değerler girin.");
                     return;
                 }
 
                 // Günlük su tüketimi hesaplama (kg başına 0.033 litre)
-                const waterIntake = (weight * 0.033).toFixed(2);
+                let waterIntake = (weight * 0.033).toFixed(2);
+
+                // Aktivite seviyesine göre su tüketimi artırma
+                if (activityLevel === "moderate") {
+                    waterIntake = (waterIntake * 1.2).toFixed(2);
+                } else if (activityLevel === "high") {
+                    waterIntake = (waterIntake * 1.5).toFixed(2);
+                }
 
                 // Sonucu göster
                 waterAmountText.textContent = `Günlük önerilen su tüketimi: ${waterIntake} litre.`;
                 waterResultDiv.style.display = "block";
+            });
+
+            // Randevu silme işlemi
+            const deleteAppointmentButtons = document.querySelectorAll(".delete-appointment");
+
+            deleteAppointmentButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const appointmentId = this.getAttribute("data-id");
+
+                    if (confirm("Bu randevuyu silmek istediğinize emin misiniz?")) {
+                        fetch(`/appointment/${appointmentId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                            },
+                        })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                alert(data.message);
+                                location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                            })
+                            .catch((error) => {
+                                console.error("Hata:", error);
+                                alert("Randevu silinirken bir hata oluştu.");
+                            });
+                    }
+                });
+            });
+
+            // İlaç silme işlemi
+            const deleteMedicationButtons = document.querySelectorAll(".delete-medication");
+
+            deleteMedicationButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const medicationId = this.getAttribute("data-id");
+
+                    if (confirm("Bu ilacı silmek istediğinize emin misiniz?")) {
+                        fetch(`/medications/${medicationId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                            },
+                        })
+                            .then((response) => response.json())
+                                .then((data) => {
+                                    alert(data.message);
+                                    location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                                })
+                                .catch((error) => {
+                                    console.error("Hata:", error);
+                                    alert("İlaç silinirken bir hata oluştu.");
+                                });
+                    }
+                });
             });
         });
     </script>

@@ -31,4 +31,17 @@ class AppointmentController extends Controller
         //TODO
         return response()->json(['message' => 'Randevu başarıyla kaydedildi!']);
     }
+    public function destroy($id)
+    {
+        $appointment = DB::table('appointments')->where('id', $id)->first();
+
+        if (!$appointment) {
+            return response()->json(['message' => 'Randevu bulunamadı.'], 404);
+        }
+
+        // Randevuyu sil
+        DB::table('appointments')->where('id', $id)->delete();
+
+        return response()->json(['message' => 'Randevu başarıyla silindi.']);
+    }
 }

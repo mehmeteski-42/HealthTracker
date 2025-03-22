@@ -30,6 +30,7 @@
                                 <th>Randevu Saati</th>
                                 <th>Bölüm</th>
                                 <th>Lokasyon</th>
+                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,6 +40,9 @@
                                     <td>{{ $appointment->time }}</td>
                                     <td>{{ $appointment->departmant }}</td>
                                     <td>{{ $appointment->location }}</td>
+                                    <td>
+                                        <button class="btn btn-danger delete-appointment" data-id="{{ $appointment->id }}">Sil</button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -89,6 +93,7 @@
                                 <th>İlaç Adı</th>
                                 <th>Alınma Zamanı</th>
                                 <th>Detaylı Bilgi</th>
+                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -97,6 +102,9 @@
                                     <td>{{ $medication->name }}</td>
                                     <td>{{ $medication->time }}</td>
                                     <td>{{ $medication->additional_notes }}</td>
+                                    <td>
+                                        <button class="btn btn-danger delete-medication" data-id="{{ $medication->id }}">Sil</button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -306,6 +314,60 @@
                 // Sonucu göster
                 waterAmountText.textContent = `Günlük önerilen su tüketimi: ${waterIntake} litre.`;
                 waterResultDiv.style.display = "block";
+            });
+
+            // Randevu silme işlemi
+            const deleteAppointmentButtons = document.querySelectorAll(".delete-appointment");
+
+            deleteAppointmentButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const appointmentId = this.getAttribute("data-id");
+
+                    if (confirm("Bu randevuyu silmek istediğinize emin misiniz?")) {
+                        fetch(`/appointment/${appointmentId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            },
+                        })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                alert(data.message);
+                                location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                            })
+                            .catch((error) => {
+                                console.error("Hata:", error);
+                                alert("Randevu silinirken bir hata oluştu.");
+                            });
+                    }
+                });
+            });
+
+            // İlaç silme işlemi
+            const deleteMedicationButtons = document.querySelectorAll(".delete-medication");
+
+            deleteMedicationButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const medicationId = this.getAttribute("data-id");
+
+                    if (confirm("Bu ilacı silmek istediğinize emin misiniz?")) {
+                        fetch(`/medications/${medicationId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            },
+                        })
+                            .then((response) => response.json())
+                                .then((data) => {
+                                    alert(data.message);
+                                    location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                                })
+                                .catch((error) => {
+                                    console.error("Hata:", error);
+                                    alert("İlaç silinirken bir hata oluştu.");
+                                });
+                    }
+                });
             });
         });
     </script>

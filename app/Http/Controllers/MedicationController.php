@@ -29,4 +29,17 @@ class MedicationController extends Controller
         //TODO
         return response()->json(['message' => 'İlaç başarıyla kaydedildi!']);
     }
+    public function destroy($id)
+    {
+        $medication = DB::table('medications')->where('id', $id)->first();
+
+        if (!$medication) {
+            return response()->json(['message' => 'İlaç bulunamadı.'], 404);
+        }
+
+        // İlacı sil
+        DB::table('medications')->where('id', $id)->delete();
+
+        return response()->json(['message' => 'İlaç başarıyla silindi.']);
+    }
 }

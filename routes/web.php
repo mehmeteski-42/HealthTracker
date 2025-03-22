@@ -1,12 +1,5 @@
 <?php
 
-/* Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-}); */
-
-
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
@@ -24,8 +17,11 @@ Route::post('/loginAccount', [LoginController::class, 'log_in'])->name('loginAcc
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointments.store');
+Route::delete('/appointment/{id}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
 
 Route::post('/medications', [MedicationController::class, 'store'])->name('medications.store');
+Route::delete('/medications/{id}', [MedicationController::class, 'destroy'])->name('medications.destroy');
+
 
 
 require __DIR__.'/settings.php';
