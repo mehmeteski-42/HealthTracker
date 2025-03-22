@@ -77,6 +77,56 @@
                     </form>
                 </div>
             </div>
+
+            <div class="container mt-5">
+                <h2>İlaç Takip</h2>
+                
+                <!-- Kullanıcıya ait ilaçların listesi -->
+                <?php if($medications->isNotEmpty()): ?>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>İlaç Adı</th>
+                                <th>Alınma Zamanı</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $__currentLoopData = $medications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $medication): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr>
+                                    <td><?php echo e($medication->name); ?></td>
+                                    <td><?php echo e($medication->time); ?></td>
+                                </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p>Henüz bir ilaç eklenmemiştir.</p>
+                <?php endif; ?>
+
+                <!-- İlaç Ekle Butonu -->
+                <button id="addMedicationBtn" class="btn btn-primary">İlaç Ekle</button>
+            </div>
+
+            <!-- Modal -->
+            <div id="medicationModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span id="closeModal" class="close">&times;</span>
+                    <h3>İlaç Oluştur</h3>
+                    <form id="medicationForm">
+                        <div class="form-group">
+                            <label for="medicationName">İlaç Adı</label>
+                            <input type="text" id="medicationName" class="form-control" placeholder="İlaç Adı">
+                        </div>
+                        <div class="form-group">
+                            <label for="medicationTime">İlaç Saati</label>
+                            <input type="time" id="medicationTime" class="form-control">
+                        </div>
+                        <button type="button" id="submitMedication" class="btn btn-success">Kaydet</button>
+                    </form>
+                </div>
+            </div>
+
+            
         <?php else: ?>
             <a href="<?php echo e(route('loginAccount')); ?>" class="btn btn-primary">Login</a>
             <a href="<?php echo e(route('registerAccount')); ?>" class="btn btn-secondary">Register</a>
@@ -84,56 +134,106 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const modal = document.getElementById("appointmentModal");
+            // Randevu modal'ı
+            const appointmentModal = document.getElementById("appointmentModal");
             const addAppointmentBtn = document.getElementById("addAppointmentBtn");
-            const closeModal = document.getElementById("closeModal");
+            const closeAppointmentModal = document.querySelector("#appointmentModal .close");
 
-            // Modal'ı aç
+            // İlaç modal'ı
+            const medicationModal = document.getElementById("medicationModal");
+            const addMedicationBtn = document.getElementById("addMedicationBtn");
+            const closeMedicationModal = document.querySelector("#medicationModal .close");
+
+            // Randevu modal'ını aç
             addAppointmentBtn.addEventListener("click", function () {
-                modal.style.display = "block";
+                appointmentModal.style.display = "block";
             });
 
-            // Modal'ı kapat
-            closeModal.addEventListener("click", function () {
-                modal.style.display = "none";
+            // Randevu modal'ını kapat
+            closeAppointmentModal.addEventListener("click", function () {
+                appointmentModal.style.display = "none";
+            });
+
+            // İlaç modal'ını aç
+            addMedicationBtn.addEventListener("click", function () {
+                medicationModal.style.display = "block";
+            });
+
+            // İlaç modal'ını kapat
+            closeMedicationModal.addEventListener("click", function () {
+                medicationModal.style.display = "none";
             });
 
             // Modal dışında bir yere tıklanırsa kapat
             window.addEventListener("click", function (event) {
-                if (event.target === modal) {
-                    modal.style.display = "none";
+                if (event.target === appointmentModal) {
+                    appointmentModal.style.display = "none";
+                }
+                if (event.target === medicationModal) {
+                    medicationModal.style.display = "none";
                 }
             });
-        });
-        document.getElementById("submitAppointment").addEventListener("click", function () {
-            const doctorName = document.getElementById("doctorName").value;
-            const appointmentTime = document.getElementById("appointmentTime").value;
-            const department = document.getElementById("department").value;
-            const location = document.getElementById("location").value;
 
-            fetch("<?php echo e(route('appointments.store')); ?>", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
-                },
-                body: JSON.stringify({
-                    doctorName: doctorName,
-                    appointmentTime: appointmentTime,
-                    department: department,
-                    location: location,
-                }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    alert(data.message);
-                    location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+            // Randevu kaydetme işlemi
+            document.getElementById("submitAppointment").addEventListener("click", function () {
+                const doctorName = document.getElementById("doctorName").value;
+                const appointmentTime = document.getElementById("appointmentTime").value;
+                const department = document.getElementById("department").value;
+                const location = document.getElementById("location").value;
+
+                fetch("<?php echo e(route('appointments.store')); ?>", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                    },
+                    body: JSON.stringify({
+                        doctorName: doctorName,
+                        appointmentTime: appointmentTime,
+                        department: department,
+                        location: location,
+                    }),
                 })
-                .catch((error) => {
-                    console.error("Hata:", error);
-                    //alert("Randevu kaydedilirken bir hata oluştu."); //TODO
+                    .then((response) => response.json())
+                    .then((data) => {
+                        alert(data.message);
+                        appointmentModal.style.display = "none"; // Modal'ı kapat
+                        location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                    })
+                    .catch((error) => {
+                        console.error("Hata:", error);
+                        alert("Randevu kaydedilirken bir hata oluştu.");
+                    });
+            });
+
+            // İlaç kaydetme işlemi
+            document.getElementById("submitMedication").addEventListener("click", function () {
+                const medicationName = document.getElementById("medicationName").value;
+                const medicationTime = document.getElementById("medicationTime").value;
+
+                fetch("<?php echo e(route('medications.store')); ?>", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                    },
+                    body: JSON.stringify({
+                        medicationName: medicationName,
+                        medicationTime: medicationTime,
+                    }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        alert(data.message);
+                        medicationModal.style.display = "none"; // Modal'ı kapat
+                        location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                    })
+                    .catch((error) => {
+                        console.error("Hata:", error);
+                        alert("İlaç kaydedilirken bir hata oluştu.");
+                    });
+            });
         });
-    });
     </script>
 </body>
 </html><?php /**PATH C:\laragon\www\HealthTracker\resources\views/welcome.blade.php ENDPATH**/ ?>
