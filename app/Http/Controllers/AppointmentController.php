@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Appointment;
 
 class AppointmentController extends Controller
@@ -19,14 +20,15 @@ class AppointmentController extends Controller
         ]);
 
         // Randevuyu kaydet
-        Appointment::create([
+        DB::table('appointments')->insert([
             'user_id' => Auth::id(),
-            'name' => $request->doctorName,
+            'doctor_name' => $request->doctorName,
             'time' => $request->appointmentTime,
             'departmant' => $request->department,
             'location' => $request->location,
         ]);
-
+        
+        //TODO
         return response()->json(['message' => 'Randevu başarıyla kaydedildi!']);
     }
 }

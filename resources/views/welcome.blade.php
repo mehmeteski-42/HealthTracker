@@ -20,6 +20,34 @@
             </form>
             <div class="container mt-4">
                 <h2>Doktor Randevuları</h2>
+                
+                <!-- Kullanıcıya ait randevuların listesi -->
+                @if($appointments->isNotEmpty())
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Doktor Adı</th>
+                                <th>Randevu Saati</th>
+                                <th>Bölüm</th>
+                                <th>Lokasyon</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($appointments as $appointment)
+                                <tr>
+                                    <td>{{ $appointment->doctor_name }}</td>
+                                    <td>{{ $appointment->time }}</td>
+                                    <td>{{ $appointment->departmant }}</td>
+                                    <td>{{ $appointment->location }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <p>Henüz bir randevunuz bulunmamaktadır.</p>
+                @endif
+
+                <!-- Randevu Ekle Butonu -->
                 <button id="addAppointmentBtn" class="btn btn-primary">Randevu Ekle</button>
             </div>
 
@@ -78,33 +106,33 @@
             });
         });
         document.getElementById("submitAppointment").addEventListener("click", function () {
-        const doctorName = document.getElementById("doctorName").value;
-        const appointmentTime = document.getElementById("appointmentTime").value;
-        const department = document.getElementById("department").value;
-        const location = document.getElementById("location").value;
+            const doctorName = document.getElementById("doctorName").value;
+            const appointmentTime = document.getElementById("appointmentTime").value;
+            const department = document.getElementById("department").value;
+            const location = document.getElementById("location").value;
 
-        fetch("{{ route('appointments.store') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-            },
-            body: JSON.stringify({
-                doctorName: doctorName,
-                appointmentTime: appointmentTime,
-                department: department,
-                location: location,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                alert(data.message);
-                document.getElementById("appointmentModal").style.display = "none";
+            fetch("{{ route('appointments.store') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                },
+                body: JSON.stringify({
+                    doctorName: doctorName,
+                    appointmentTime: appointmentTime,
+                    department: department,
+                    location: location,
+                }),
             })
-            .catch((error) => {
-                console.error("Hata:", error);
-                alert("Randevu kaydedilirken bir hata oluştu.");
-            });
+                .then((response) => response.json())
+                .then((data) => {
+                    alert(data.message);
+                    location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                })
+                .catch((error) => {
+                    console.error("Hata:", error);
+                    //alert("Randevu kaydedilirken bir hata oluştu."); //TODO
+        });
     });
     </script>
 </body>
