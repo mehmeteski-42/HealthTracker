@@ -14,7 +14,9 @@ laragon terminaline girip:
 3. http://127.0.0.1:8000/test adresine tarayıcınızdan girin. "Laravel çalışıyor!" çıktısı alırsanız kurulum tamamlanmıştır.
 
 Database kurulumu;
+
 1.Laragonda "hepsini başlat" butonuna tıkladıktan sonra laragondan veritabanı tuşuna basın.
+
 2.Açılan pencerede Laragon.MySQL adlı oturuma çift tıklayın. Eğer healthtracker adlı bir scheme varsa droplayın. Sonrasında sırayla aşağıdaki sorguları runlayın.
 
 CREATE DATABASE health_tracker;
