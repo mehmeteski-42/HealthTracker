@@ -137,6 +137,13 @@
                                     <td>{{ $medication->time }}</td>
                                     <td>{{ $medication->additional_notes }}</td>
                                     <td>
+                                        <button class="btn btn-primary edit-medication" 
+                                                data-id="{{ $medication->id }}" 
+                                                data-name="{{ $medication->name }}" 
+                                                data-time="{{ $medication->time }}" 
+                                                data-notes="{{ $medication->additional_notes }}">
+                                            Düzenle
+                                        </button>
                                         <button class="btn btn-danger delete-medication" data-id="{{ $medication->id }}">Sil</button>
                                     </td>
                                 </tr>
@@ -170,6 +177,28 @@
                             <input type="text" id="additional_notes" class="form-control" placeholder="Kullanım sıklığı, dozaj vb.">
                         </div>
                         <button type="button" id="submitMedication" class="btn btn-success">Kaydet</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="editMedicationModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span id="closeEditMedicationModal" class="close">&times;</span>
+                    <h3>İlacı Düzenle</h3>
+                    <form id="editMedicationForm">
+                        <div class="form-group">
+                            <label for="editMedicationName">İlaç Adı</label>
+                            <input type="text" id="editMedicationName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editMedicationTime">Alınma Zamanı</label>
+                            <input type="time" id="editMedicationTime" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAdditionalNotes">Detaylı Bilgi</label>
+                            <input type="text" id="editAdditionalNotes" class="form-control">
+                        </div>
+                        <button type="button" id="updateMedication" class="btn btn-success">Güncelle</button>
                     </form>
                 </div>
             </div>
@@ -501,6 +530,101 @@
             window.addEventListener("click", function (event) {
                 if (event.target === editModal) {
                     editModal.style.display = "none";
+                }
+            });
+
+            // İlaç güncelleme işlemi
+            const editMedicationButtons = document.querySelectorAll(".edit-medication");
+            const editMedicationModal = document.getElementById("editMedicationModal");
+            const closeEditMedicationModal = document.getElementById("closeEditMedicationModal");
+
+            // Modal'ı aç ve mevcut değerleri doldur
+            editMedicationButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const medicationId = this.getAttribute("data-id");
+                    const medicationName = this.getAttribute("data-name");
+                    const medicationTime = this.getAttribute("data-time");
+                    const additionalNotes = this.getAttribute("data-notes");
+
+                    // Mevcut değerleri modal inputlarına yerleştir
+                    document.getElementById("editMedicationName").value = medicationName;
+                    document.getElementById("editAdditionalNotes").value = additionalNotes;
+
+                    editMedicationModal.style.display = "block";
+
+                    // Güncelleme işlemi
+                    document.getElementById("updateMedication").onclick = function () {
+                        const updatedMedicationName = document.getElementById("editMedicationName").value;
+                        const updatedMedicationTime = document.getElementById("editMedicationTime").value;
+                        const updatedAdditionalNotes = document.getElementById("editAdditionalNotes").value;
+
+                        // Boş alan kontrolü
+                        if (!updatedMedicationName || !updatedMedicationTime || !updatedAdditionalNotes) {
+                            alert("Lütfen tüm alanları doldurun.");
+                            return;
+                        }
+
+                        // İlk olarak ilacı sil
+                        fetch(`/medications/${medicationId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            },
+                        })
+                            .then((response) => {
+                                if (!response.ok) {
+                                    alert("Randevu silme işlemi başarısız oldu.");
+                                    throw new Error("Randevu silme işlemi başarısız oldu.");
+                                }
+                                return response.json();
+                            })
+                            .then(() => {
+                                // Yeni verilerle randevu ekle
+                                const requestBody = {
+                                    medicationName: updatedMedicationName,
+                                    medicationTime: updatedMedicationTime,
+                                    additional_notes: updatedAdditionalNotes,
+                                };
+
+                                fetch("{{ route('medications.store') }}", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                    },
+                                    body: JSON.stringify(requestBody),
+                                })
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                        if (data != null) {
+                                            alert(data.message);
+                                            appointmentModal.style.display = "none"; // Modal'ı kapat
+                                            location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                                        }
+                                    })
+                                    .then(() => {
+                                        editModal.style.display = "none"; // Modal'ı kapat
+                                    })
+                                    .catch((error) => {
+                                        console.error("Hata1:", error);
+                                        alert("Hata1:" + error);
+                                    });
+                            })
+                            .catch((error) => {
+                                console.error("Hata2:" + error);
+                        });
+                    };
+                });
+            });
+
+            // Modal'ı kapat
+            closeEditMedicationModal.addEventListener("click", function () {
+                editMedicationModal.style.display = "none";
+            });
+
+            window.addEventListener("click", function (event) {
+                if (event.target === editMedicationModal) {
+                    editMedicationModal.style.display = "none";
                 }
             });
         });
