@@ -41,6 +41,14 @@
                                     <td>{{ $appointment->departmant }}</td>
                                     <td>{{ $appointment->location }}</td>
                                     <td>
+                                        <button class="btn btn-primary edit-appointment" 
+                                                data-id="{{ $appointment->id }}" 
+                                                data-doctor="{{ $appointment->doctor_name }}" 
+                                                data-time="{{ $appointment->time }}" 
+                                                data-department="{{ $appointment->departmant }}" 
+                                                data-location="{{ $appointment->location }}">
+                                            Düzenle
+                                        </button>
                                         <button class="btn btn-danger delete-appointment" data-id="{{ $appointment->id }}">Sil</button>
                                     </td>
                                 </tr>
@@ -78,6 +86,32 @@
                             <input type="text" id="location" class="form-control" placeholder="Hastane lokasyonu">
                         </div>
                         <button type="button" id="submitAppointment" class="btn btn-success">Kaydet</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="editAppointmentModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span id="closeEditModal" class="close">&times;</span>
+                    <h3>Randevuyu Düzenle</h3>
+                    <form id="editAppointmentForm">
+                        <div class="form-group">
+                            <label for="editDoctorName">Doktor Adı</label>
+                            <input type="text" id="editDoctorName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAppointmentTime">Randevu Saati</label>
+                            <input type="time" id="editAppointmentTime" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editDepartment">Bölüm</label>
+                            <input type="text" id="editDepartment" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editLocation">Hastane Lokasyonu</label>
+                            <input type="text" id="editLocation" class="form-control">
+                        </div>
+                        <button type="button" id="updateAppointment" class="btn btn-success">Güncelle</button>
                     </form>
                 </div>
             </div>
@@ -368,6 +402,90 @@
                                 });
                     }
                 });
+            });
+            // Randevu güncelleme işlemi
+            const editButtons = document.querySelectorAll(".edit-appointment");
+            const editModal = document.getElementById("editAppointmentModal");
+            const closeEditModal = document.getElementById("closeEditModal");
+
+            // Modal'ı aç ve mevcut değerleri doldur
+            editButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const appointmentId = this.getAttribute("data-id");
+                    const doctorName = this.getAttribute("data-doctor");
+                    const appointmentTime = this.getAttribute("data-time");
+                    const department = this.getAttribute("data-department");
+                    const location = this.getAttribute("data-location");
+
+                    // Mevcut değerleri modal inputlarına yerleştir
+                    document.getElementById("editDoctorName").value = doctorName;
+                    document.getElementById("editAppointmentTime").value = appointmentTime;
+                    document.getElementById("editDepartment").value = department;
+                    document.getElementById("editLocation").value = location;
+
+                    editModal.style.display = "block";
+
+                    // Güncelleme işlemi
+                    document.getElementById("updateAppointment").onclick = function () {
+
+                        // İlk olarak randevuyu sil
+                        fetch(`/appointment/${appointmentId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            },
+                        })
+                            .then((response) => {
+                                if (!response.ok) {
+                                    throw new Error("Randevu silme işlemi başarısız oldu.");
+                                }
+                                return response.json();
+                            })
+                            .then(() => {
+                                // Yeni verilerle randevu ekle
+                                const doctorName = document.getElementById("editDoctorName").value;
+                                const appointmentTime = document.getElementById("editAppointmentTime").value;
+                                const department = document.getElementById("editDepartment").value;
+                                const location = document.getElementById("editLocation").value;
+
+                                return fetch("{{ route('appointments.store') }}", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                    },
+                                    body: JSON.stringify({
+                                        doctorName: doctorName,
+                                        appointmentTime: appointmentTime,
+                                        department: department,
+                                        location: location,
+                                    }),
+                                });
+                            })
+                            // Yeni randevu ekleme işlemi başarılı olursa
+                            .then((response) => response.json())
+                            // Başarılı olursa sayfayı yenile
+                            .then((data) => {
+                                alert(data.message);
+                                location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                            })
+                            .catch((error) => {
+                                console.error("Hata:", error);
+                                alert("Randevu güncellenirken bir hata oluştu.");
+                            });
+                    };
+                });
+            });
+
+            // Modal'ı kapat
+            closeEditModal.addEventListener("click", function () {
+                editModal.style.display = "none";
+            });
+
+            window.addEventListener("click", function (event) {
+                if (event.target === editModal) {
+                    editModal.style.display = "none";
+                }
             });
         });
     </script>
