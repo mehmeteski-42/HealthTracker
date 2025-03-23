@@ -24,7 +24,7 @@ class AppointmentController extends Controller
             'user_id' => Auth::id(),
             'doctor_name' => $request->doctorName,
             'time' => $request->appointmentTime,
-            'departmant' => $request->department,
+            'department' => $request->department,
             'location' => $request->location,
         ]);
         
@@ -62,7 +62,7 @@ class AppointmentController extends Controller
         DB::table('appointments')->where('id', $id)->update([
             'doctor_name' => $request->doctorName,
             'time' => $request->appointmentTime,
-            'departmant' => $request->department,
+            'department' => $request->department,
             'location' => $request->location,
         ]);
 

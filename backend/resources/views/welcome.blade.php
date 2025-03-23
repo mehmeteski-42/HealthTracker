@@ -38,14 +38,14 @@
                                 <tr>
                                     <td>{{ $appointment->doctor_name }}</td>
                                     <td>{{ $appointment->time }}</td>
-                                    <td>{{ $appointment->departmant }}</td>
+                                    <td>{{ $appointment->department }}</td>
                                     <td>{{ $appointment->location }}</td>
                                     <td>
                                         <button class="btn btn-primary edit-appointment" 
                                                 data-id="{{ $appointment->id }}" 
                                                 data-doctor="{{ $appointment->doctor_name }}" 
                                                 data-time="{{ $appointment->time }}" 
-                                                data-department="{{ $appointment->departmant }}" 
+                                                data-department="{{ $appointment->department }}" 
                                                 data-location="{{ $appointment->location }}">
                                             Düzenle
                                         </button>
@@ -218,6 +218,8 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Randevu ekleme işlemleri için URL
+            const storeAppointmentURL = "{{ route('appointments.store') }}";
             // Randevu modal'ı
             const appointmentModal = document.getElementById("appointmentModal");
             const addAppointmentBtn = document.getElementById("addAppointmentBtn");
@@ -265,18 +267,22 @@
                 const department = document.getElementById("department").value;
                 const location = document.getElementById("location").value;
 
-                fetch("{{ route('appointments.store') }}", {
+                const requestBody = {
+                    doctorName: doctorName,
+                    appointmentTime: appointmentTime,
+                    department: department,
+                    location: location,
+                };
+
+                alert(JSON.stringify(requestBody, null, 2)); // Body'yi alert ile göster
+
+                fetch(storeAppointmentURL, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
-                    body: JSON.stringify({
-                        doctorName: doctorName,
-                        appointmentTime: appointmentTime,
-                        department: department,
-                        location: location,
-                    }),
+                    body: JSON.stringify(requestBody),
                 })
                     .then((response) => response.json())
                     .then((data) => {
@@ -437,6 +443,7 @@
                         })
                             .then((response) => {
                                 if (!response.ok) {
+                                    alert("Randevu silme işlemi başarısız oldu.");
                                     throw new Error("Randevu silme işlemi başarısız oldu.");
                                 }
                                 return response.json();
@@ -448,30 +455,45 @@
                                 const department = document.getElementById("editDepartment").value;
                                 const location = document.getElementById("editLocation").value;
 
-                                return fetch("{{ route('appointments.store') }}", {
+                                const requestBody = {
+                                    doctorName: doctorName,
+                                    appointmentTime: appointmentTime,
+                                    department: department,
+                                    location: location,
+                                };
+
+                                alert(JSON.stringify(requestBody, null, 2)); // Body'yi alert ile göster
+
+                                fetch("{{ route('appointments.store') }}", {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/json",
                                         "X-CSRF-TOKEN": "{{ csrf_token() }}",
                                     },
-                                    body: JSON.stringify({
-                                        doctorName: doctorName,
-                                        appointmentTime: appointmentTime,
-                                        department: department,
-                                        location: location,
-                                    }),
-                                });
-                            })
-                            // Yeni randevu ekleme işlemi başarılı olursa
-                            .then((response) => response.json())
-                            // Başarılı olursa sayfayı yenile
-                            .then((data) => {
-                                alert(data.message);
-                                location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                                    body: JSON.stringify(requestBody),
+                                })
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                        //alert if data is null
+                                        if(data == null){
+                                            alert("Data is null");
+                                            return;
+                                        }
+                                        else{
+                                            alert("data is not null");
+                                            alert(data.message);
+                                            appointmentModal.style.display = "none"; // Modal'ı kapat
+                                            location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                                        }
+                                        
+                                    })
+                                    .catch((error) => {
+                                        console.error("Hata1:", error);
+                                        alert("Hata1:" + error);
+                                    });
                             })
                             .catch((error) => {
-                                console.error("Hata:", error);
-                                alert("Randevu güncellenirken bir hata oluştu.");
+                                console.error("Hata2:"+ error);
                             });
                     };
                 });
