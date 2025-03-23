@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="{{ asset('css/modal.css') }}">
 </head>
 <body>
-    
+    @include('navbar')
+
     <div class="container text-center mt-5">
         <h1>Welcome to HealthTracker</h1>
         <p>Your health, our priority.</p>
@@ -213,44 +214,6 @@
                     </form>
                 </div>
             </div>
-
-            <div class="container mt-5">
-                <h2>Su Tüketim Hesaplayıcı</h2>
-                <div class="card" style="width: 100%; max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                    <h4>Günlük Su Tüketimi</h4>
-                    <p>Boy, kilo, yaş ve aktivite seviyenizi girerek günlük önerilen su miktarını hesaplayın.</p>
-                    <form id="waterCalculatorForm">
-                        <div class="form-group">
-                            <label for="weight">Kilo (kg)</label>
-                            <input type="number" id="weight" class="form-control" placeholder="Kilonuzu girin" min="1" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="height">Boy (cm)</label>
-                            <input type="number" id="height" class="form-control" placeholder="Boyunuzu girin" min="50" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="age">Yaş</label>
-                            <input type="number" id="age" class="form-control" placeholder="Yaşınızı girin" min="1" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="activityLevel">Aktivite Seviyesi</label>
-                            <select id="activityLevel" class="form-control" required>
-                                <option value="low">Hafif</option>
-                                <option value="moderate">Orta</option>
-                                <option value="high">Yoğun</option>
-                            </select>
-                        </div>
-                        <div class="form-group mt-3">
-                            <button type="button" id="calculateWater" class="btn btn-primary">Hesapla</button>
-                        </div>
-                    </form>
-                    <div id="waterResult" class="mt-3" style="display: none;">
-                        <h5>Sonuç:</h5>
-                        <p id="waterAmount"></p>
-                    </div>
-                </div>
-            </div>
-            
         @else
             <a href="{{ route('loginAccount') }}" class="btn btn-primary">Login</a>
             <a href="{{ route('registerAccount') }}" class="btn btn-secondary">Register</a>
@@ -269,6 +232,22 @@
             const medicationModal = document.getElementById("medicationModal");
             const addMedicationBtn = document.getElementById("addMedicationBtn");
             const closeMedicationModal = document.querySelector("#medicationModal .close");
+            
+            // Randevu silme işlemi
+            const deleteAppointmentButtons = document.querySelectorAll(".delete-appointment");
+            
+            // İlaç silme işlemi
+            const deleteMedicationButtons = document.querySelectorAll(".delete-medication");
+            
+            // Randevu güncelleme işlemi
+            const editAppointmentButtons = document.querySelectorAll(".edit-appointment");
+            const editModal = document.getElementById("editAppointmentModal");
+            const closeEditModal = document.getElementById("closeEditModal");
+            
+            // İlaç güncelleme işlemi
+            const editMedicationButtons = document.querySelectorAll(".edit-medication");
+            const editMedicationModal = document.getElementById("editMedicationModal");
+            const closeEditMedicationModal = document.getElementById("closeEditMedicationModal");
 
             // Randevu modal'ını aç
             addAppointmentBtn.addEventListener("click", function () {
@@ -306,19 +285,15 @@
                 const date = document.getElementById("appointmentDate").value;
                 const appointmentTime = document.getElementById("appointmentTime").value;
                 const department = document.getElementById("department").value;
-                const location = document.getElementById("location").value;
+                const locationVal = document.getElementById("location").value;
 
                 const requestBody = {
                     doctorName: doctorName,
                     appointmentTime: appointmentTime,
                     date: date,
                     department: department,
-                    location: location,
+                    location: locationVal,
                 };
-
-                Object.entries(requestBody).forEach(([key, value]) => {
-                    alert(key + ": " + value);
-                });
 
                 fetch(storeAppointmentURL, {
                     method: "POST",
@@ -330,10 +305,9 @@
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        if(data == null)
-                            alert("Randevu kaydedilirken bir hata oluştu.");
                         alert(data.message);
                         appointmentModal.style.display = "none"; // Modal'ı kapat
+                        location.reload(); // Sayfayı yenileyerek tabloyu güncelle
                     })
                     .catch((error) => {
                         console.error("Hata:", error);
@@ -371,39 +345,7 @@
                     });
             });
 
-            const calculateWaterBtn = document.getElementById("calculateWater");
-            const waterResultDiv = document.getElementById("waterResult");
-            const waterAmountText = document.getElementById("waterAmount");
-
-            calculateWaterBtn.addEventListener("click", function () {
-                const weight = document.getElementById("weight").value;
-                const height = document.getElementById("height").value;
-                const age = document.getElementById("age").value;
-                const activityLevel = document.getElementById("activityLevel").value;
-
-                if (!weight || weight <= 0 || !height || height <= 0 || !age || age <= 0) {
-                    alert("Lütfen geçerli değerler girin.");
-                    return;
-                }
-
-                // Günlük su tüketimi hesaplama (kg başına 0.033 litre)
-                let waterIntake = (weight * 0.033).toFixed(2);
-
-                // Aktivite seviyesine göre su tüketimi artırma
-                if (activityLevel === "moderate") {
-                    waterIntake = (waterIntake * 1.2).toFixed(2);
-                } else if (activityLevel === "high") {
-                    waterIntake = (waterIntake * 1.5).toFixed(2);
-                }
-
-                // Sonucu göster
-                waterAmountText.textContent = `Günlük önerilen su tüketimi: ${waterIntake} litre.`;
-                waterResultDiv.style.display = "block";
-            });
-
             // Randevu silme işlemi
-            const deleteAppointmentButtons = document.querySelectorAll(".delete-appointment");
-
             deleteAppointmentButtons.forEach((button) => {
                 button.addEventListener("click", function () {
                     const appointmentId = this.getAttribute("data-id");
@@ -429,8 +371,6 @@
             });
 
             // İlaç silme işlemi
-            const deleteMedicationButtons = document.querySelectorAll(".delete-medication");
-
             deleteMedicationButtons.forEach((button) => {
                 button.addEventListener("click", function () {
                     const medicationId = this.getAttribute("data-id");
@@ -454,13 +394,9 @@
                     }
                 });
             });
+            
             // Randevu güncelleme işlemi
-            const editButtons = document.querySelectorAll(".edit-appointment");
-            const editModal = document.getElementById("editAppointmentModal");
-            const closeEditModal = document.getElementById("closeEditModal");
-
-            // Modal'ı aç ve mevcut değerleri doldur
-            editButtons.forEach((button) => {
+            editAppointmentButtons.forEach((button) => {
                 button.addEventListener("click", function () {
                     const appointmentId = this.getAttribute("data-id");
                     const doctorName = this.getAttribute("data-doctor");
@@ -554,11 +490,6 @@
                     editModal.style.display = "none";
                 }
             });
-
-            // İlaç güncelleme işlemi
-            const editMedicationButtons = document.querySelectorAll(".edit-medication");
-            const editMedicationModal = document.getElementById("editMedicationModal");
-            const closeEditMedicationModal = document.getElementById("closeEditMedicationModal");
 
             // Modal'ı aç ve mevcut değerleri doldur
             editMedicationButtons.forEach((button) => {
