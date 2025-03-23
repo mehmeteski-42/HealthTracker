@@ -274,8 +274,6 @@
                     location: location,
                 };
 
-                alert(JSON.stringify(requestBody, null, 2)); // Body'yi alert ile göster
-
                 fetch(storeAppointmentURL, {
                     method: "POST",
                     headers: {
@@ -287,8 +285,7 @@
                     .then((response) => response.json())
                     .then((data) => {
                         alert(data.message);
-                        appointmentModal.style.display = "none"; // Modal'ı kapat
-                        location.reload(); // Sayfayı yenileyerek tabloyu güncelle
+                        editModal.style.display = "none"; // Modal'ı kapat
                     })
                     .catch((error) => {
                         console.error("Hata:", error);
@@ -425,7 +422,6 @@
 
                     // Mevcut değerleri modal inputlarına yerleştir
                     document.getElementById("editDoctorName").value = doctorName;
-                    document.getElementById("editAppointmentTime").value = appointmentTime;
                     document.getElementById("editDepartment").value = department;
                     document.getElementById("editLocation").value = location;
 
@@ -433,6 +429,16 @@
 
                     // Güncelleme işlemi
                     document.getElementById("updateAppointment").onclick = function () {
+                        const doctorName = document.getElementById("editDoctorName").value;
+                        const appointmentTime = document.getElementById("editAppointmentTime").value;
+                        const department = document.getElementById("editDepartment").value;
+                        const location = document.getElementById("editLocation").value;
+
+                        // Boş alan kontrolü
+                        if (!doctorName || !appointmentTime || !department || !location) {
+                            alert("Lütfen tüm alanları doldurun.");
+                            return;
+                        }
 
                         // İlk olarak randevuyu sil
                         fetch(`/appointment/${appointmentId}`, {
@@ -450,19 +456,12 @@
                             })
                             .then(() => {
                                 // Yeni verilerle randevu ekle
-                                const doctorName = document.getElementById("editDoctorName").value;
-                                const appointmentTime = document.getElementById("editAppointmentTime").value;
-                                const department = document.getElementById("editDepartment").value;
-                                const location = document.getElementById("editLocation").value;
-
                                 const requestBody = {
                                     doctorName: doctorName,
                                     appointmentTime: appointmentTime,
                                     department: department,
                                     location: location,
                                 };
-
-                                alert(JSON.stringify(requestBody, null, 2)); // Body'yi alert ile göster
 
                                 fetch("{{ route('appointments.store') }}", {
                                     method: "POST",
@@ -474,18 +473,13 @@
                                 })
                                     .then((response) => response.json())
                                     .then((data) => {
-                                        //alert if data is null
-                                        if(data == null){
-                                            alert("Data is null");
-                                            return;
-                                        }
-                                        else{
-                                            alert("data is not null");
+                                        if (data != null) {
                                             alert(data.message);
                                             appointmentModal.style.display = "none"; // Modal'ı kapat
-                                            location.reload(); // Sayfayı yenileyerek tabloyu güncelle
                                         }
-                                        
+                                    })
+                                    .then(() => {
+                                        editModal.style.display = "none"; // Modal'ı kapat
                                     })
                                     .catch((error) => {
                                         console.error("Hata1:", error);
@@ -493,7 +487,7 @@
                                     });
                             })
                             .catch((error) => {
-                                console.error("Hata2:"+ error);
+                                console.error("Hata2:" + error);
                             });
                     };
                 });
