@@ -13,8 +13,9 @@ class AppointmentController extends Controller
     {
         if(Auth::check()){
             $appointments = DB::table('appointments')
-                ->where('user_id', Auth::id())
-                ->get();
+            ->where('user_id', Auth::id())
+            ->orderBy('date', 'desc')
+            ->get();
         }
         return view('appointments', compact('appointments'));
 

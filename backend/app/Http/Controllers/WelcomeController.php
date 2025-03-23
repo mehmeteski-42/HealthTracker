@@ -9,6 +9,23 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        return view('welcome');
+        $appointments = null;
+        $medications = null;
+
+        if (Auth::check()) {
+            $appointments = DB::table('appointments')
+                ->where('user_id', Auth::id())
+                ->orderBy('date', 'desc')
+                ->take(1)
+                ->get();
+
+            $medications = DB::table('medications')
+                ->where('user_id', Auth::id())
+                ->orderBy('time', 'asc')
+                ->take(1)
+                ->get();
+        }
+
+        return view('welcome', compact('appointments', 'medications'));
     }
 }

@@ -14,6 +14,7 @@ class MedicationController extends Controller
         if(Auth::check()){
             $medications = DB::table('medications')
                 ->where('user_id', Auth::id())
+                ->orderBy('time', 'asc')
                 ->get();
         }
         return view('medications', compact('medications'));

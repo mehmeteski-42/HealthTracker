@@ -74,7 +74,7 @@
                         </div>
                         <div class="form-group">
                             <label for="appointmentDate">Randevu Tarihi</label>
-                            <input type="text" id="appointmentDate" class="form-control">
+                            <input type="text" id="appointmentDate" class="form-control" placeholder="YYYY-MM-DD">
                         </div>
                         <div class="form-group">
                             <label for="department">Bölüm</label>
