@@ -27,6 +27,7 @@
                         <thead>
                             <tr>
                                 <th>Doktor Adı</th>
+                                <th>Randevu Tarihi</th>
                                 <th>Randevu Saati</th>
                                 <th>Bölüm</th>
                                 <th>Lokasyon</th>
@@ -37,6 +38,7 @@
                             @foreach($appointments as $appointment)
                                 <tr>
                                     <td>{{ $appointment->doctor_name }}</td>
+                                    <td>{{ $appointment->date }}</td>
                                     <td>{{ $appointment->time }}</td>
                                     <td>{{ $appointment->department }}</td>
                                     <td>{{ $appointment->location }}</td>
@@ -44,6 +46,7 @@
                                         <button class="btn btn-primary edit-appointment" 
                                                 data-id="{{ $appointment->id }}" 
                                                 data-doctor="{{ $appointment->doctor_name }}" 
+                                                data-date="{{ $appointment->date }}" 
                                                 data-time="{{ $appointment->time }}" 
                                                 data-department="{{ $appointment->department }}" 
                                                 data-location="{{ $appointment->location }}">
@@ -78,6 +81,10 @@
                             <input type="time" id="appointmentTime" class="form-control">
                         </div>
                         <div class="form-group">
+                            <label for="appointmentDate">Randevu Tarihi</label>
+                            <input type="text" id="appointmentDate" class="form-control">
+                        </div>
+                        <div class="form-group">
                             <label for="department">Bölüm</label>
                             <input type="text" id="department" class="form-control" placeholder="Bölüm adı">
                         </div>
@@ -102,6 +109,10 @@
                         <div class="form-group">
                             <label for="editAppointmentTime">Randevu Saati</label>
                             <input type="time" id="editAppointmentTime" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAppointmentDate">Randevu Tarihi</label>
+                            <input type="text" id="editAppointmentDate" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="editDepartment">Bölüm</label>
@@ -292,6 +303,7 @@
             // Randevu kaydetme işlemi
             document.getElementById("submitAppointment").addEventListener("click", function () {
                 const doctorName = document.getElementById("doctorName").value;
+                const date = document.getElementById("appointmentDate").value;
                 const appointmentTime = document.getElementById("appointmentTime").value;
                 const department = document.getElementById("department").value;
                 const location = document.getElementById("location").value;
@@ -299,9 +311,14 @@
                 const requestBody = {
                     doctorName: doctorName,
                     appointmentTime: appointmentTime,
+                    date: date,
                     department: department,
                     location: location,
                 };
+
+                Object.entries(requestBody).forEach(([key, value]) => {
+                    alert(key + ": " + value);
+                });
 
                 fetch(storeAppointmentURL, {
                     method: "POST",
@@ -313,12 +330,14 @@
                 })
                     .then((response) => response.json())
                     .then((data) => {
+                        if(data == null)
+                            alert("Randevu kaydedilirken bir hata oluştu.");
                         alert(data.message);
-                        editModal.style.display = "none"; // Modal'ı kapat
+                        appointmentModal.style.display = "none"; // Modal'ı kapat
                     })
                     .catch((error) => {
                         console.error("Hata:", error);
-                        //alert("Randevu kaydedilirken bir hata oluştu.");
+                        alert("Randevu kaydedilirken bir hata oluştu.");
                     });
             });
 
@@ -445,6 +464,7 @@
                 button.addEventListener("click", function () {
                     const appointmentId = this.getAttribute("data-id");
                     const doctorName = this.getAttribute("data-doctor");
+                    const appointmentDate = this.getAttribute("data-date");
                     const appointmentTime = this.getAttribute("data-time");
                     const department = this.getAttribute("data-department");
                     const location = this.getAttribute("data-location");
@@ -459,12 +479,13 @@
                     // Güncelleme işlemi
                     document.getElementById("updateAppointment").onclick = function () {
                         const doctorName = document.getElementById("editDoctorName").value;
+                        const appointmentDate = document.getElementById("editAppointmentDate").value;
                         const appointmentTime = document.getElementById("editAppointmentTime").value;
                         const department = document.getElementById("editDepartment").value;
                         const location = document.getElementById("editLocation").value;
 
                         // Boş alan kontrolü
-                        if (!doctorName || !appointmentTime || !department || !location) {
+                        if (!doctorName || !appointmentTime || !department || !location || !appointmentDate) {
                             alert("Lütfen tüm alanları doldurun.");
                             return;
                         }
@@ -487,6 +508,7 @@
                                 // Yeni verilerle randevu ekle
                                 const requestBody = {
                                     doctorName: doctorName,
+                                    date: appointmentDate,
                                     appointmentTime: appointmentTime,
                                     department: department,
                                     location: location,

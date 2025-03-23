@@ -6,6 +6,7 @@ Windows kullanan arkadaşlar,
 2. c:/laragon/www içine repoyu clonlayın
 laragon terminaline girip:
     cd healthTracker
+    cd backend
     php artisan migrate
     php artisan serve
 
@@ -42,8 +43,9 @@ CREATE TABLE appointments (
     user_id INT NOT NULL,
     doctor_name VARCHAR(100) NOT NULL, -- Doktor adı
     time TIME NOT NULL,
-    department VARCHAR(255) NOT NULL, -- hangi bölümden(kulakburunbogaz vs)
-    location VARCHAR(255) NOT NULL, -- hastanenin lokasyonu
+    date VARCHAR(10) NOT NULL, -- Randevu tarihi
+    department VARCHAR(255) NOT NULL, -- Hangi bölümden (kulakburunboğaz vs)
+    location VARCHAR(255) NOT NULL, -- Hastanenin lokasyonu
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
