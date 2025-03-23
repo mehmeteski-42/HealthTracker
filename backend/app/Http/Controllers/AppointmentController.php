@@ -6,10 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Appointment;
-use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
+    public function index()
+    {
+        if(Auth::check()){
+            $appointments = DB::table('appointments')
+                ->where('user_id', Auth::id())
+                ->get();
+        }
+        return view('appointments', compact('appointments'));
+
+    }
     public function store(Request $request)
     {
         //echo '<script> console.log("'.$request->all().'") </script>';

@@ -9,6 +9,15 @@ use App\Models\Medication;
 
 class MedicationController extends Controller
 {
+    public function index()
+    {
+        if(Auth::check()){
+            $medications = DB::table('medications')
+                ->where('user_id', Auth::id())
+                ->get();
+        }
+        return view('medications', compact('medications'));
+    }
     public function store(Request $request)
     {
         // Validasyon

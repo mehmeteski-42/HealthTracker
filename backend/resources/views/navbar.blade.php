@@ -9,6 +9,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/calculators">Calculators</a>
                 </li>
+                @if(Auth::check())
+                    <li class="nav-item">
+                        <a class="nav-link" href="/appointment">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/medications">Medications</a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>
