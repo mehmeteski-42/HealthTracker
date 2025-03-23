@@ -39,7 +39,8 @@ class VerifyCsrfToken
      *
      * @var array<int, string>
      */
-    protected $except = [];
+    protected $except = ['api/loginAccount',   // Login için CSRF koruması devre dışı bırakıldı
+    'api/register','/login' ];
 
     /**
      * The globally ignored URIs that should be excluded from CSRF verification.
@@ -79,20 +80,7 @@ class VerifyCsrfToken
      */
     public function handle($request, Closure $next)
     {
-        if (
-            $this->isReading($request) ||
-            $this->runningUnitTests() ||
-            $this->inExceptArray($request) ||
-            $this->tokensMatch($request)
-        ) {
-            return tap($next($request), function ($response) use ($request) {
-                if ($this->shouldAddXsrfTokenCookie()) {
-                    $this->addCookieToResponse($request, $response);
-                }
-            });
-        }
-
-        throw new TokenMismatchException('CSRF token mismatch.');
+        return $next($request);
     }
 
     /**
