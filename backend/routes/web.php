@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\MedicationController;
 use App\Http\Controllers\CalculatorController;
+use App\Http\Controllers\FitnessController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index']);
@@ -25,7 +26,9 @@ Route::get('/medications', [MedicationController::class, 'index']);
 Route::post('/medications', [MedicationController::class, 'store'])->name('medications.store');
 Route::delete('/medications/{id}', [MedicationController::class, 'destroy'])->name('medications.destroy');
 
-Route::get('/calculators', [CalculatorController::class, 'index'])->name('calculators');
+Route::get('/calculators', [CalculatorController::class, 'index']);
+
+Route::get('/fitness', [FitnessController::class, 'index']);
 
 
 

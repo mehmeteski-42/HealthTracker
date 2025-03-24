@@ -16,6 +16,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/medications">Medications</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/fitness">Fitness</a>
+                    </li>
                 @endif
             </ul>
         </div>

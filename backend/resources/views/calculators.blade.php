@@ -11,8 +11,6 @@
     @include('navbar')
     
     <div class="container text-center mt-5">
-        <h1>Welcome to HealthTracker</h1>
-        <p>Your health, our priority.</p>
         <div class="container mt-5">
             <h2>Su Tüketim Hesaplayıcı</h2>
             <div class="card" style="width: 100%; max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
