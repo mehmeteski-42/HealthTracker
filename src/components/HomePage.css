@@ -1,0 +1,130 @@
+/* HomePage.css */
+
+/* Genel sayfa düzeni */
+.home-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* To arrange items vertically */
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  color: #2e4728;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  padding: 20px;
+  position: relative; /* For absolute positioning of the button container */
+}
+
+.hero-section {
+  background-color: #81c96d; /* Darker background for readability */
+  padding: 50px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+/* Button container at the bottom */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  position: absolute;
+  bottom: 20px; /* Push buttons to the bottom of the page */
+  width: 100%;
+}
+
+.btn {
+  width: 100%;
+  background-color: #81c96d;
+  color: #2e4728;
+  font-size: 1rem;
+  padding: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  white-space: nowrap; /* Yazının tek satırda kalmasını sağlar */
+  
+  display: inline-block;
+  text-align: center;
+  line-height: 1.5; /* Yazının dikeyde ortalanmasını sağlar */
+  max-width: 100%;
+}
+
+.btn:hover {
+  background-color: #81c96d;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn:focus {
+  outline: none;
+}
+
+/* Responsive tasarım */
+@media screen and (max-width: 768px) {
+  .hero-section {
+    padding: 30px;
+    width: 90%;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  /* Ensure buttons stack vertically on smaller screens */
+  .button-container {
+    flex-direction: column;
+    gap: 10px;
+    bottom: 30px;
+  }
+
+  .btn {
+    width: 100%; /* Full width on smaller screens */
+  }
+
+  /* Styling the calendar and highlighting the days with appointments or medications */
+.react-calendar {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.react-calendar__tile {
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.react-calendar__tile--active {
+  background-color: #f0f8ff;
+}
+
+/* Highlighting Appointment dates */
+.highlight-appointment {
+  background-color: #ffeb3b;  /* Yellow for appointments */
+  color: white;
+}
+
+/* Highlighting Medication dates */
+.highlight-medication {
+  background-color: #ff5722;  /* Orange for medications */
+  color: white;
+}
+
+}
