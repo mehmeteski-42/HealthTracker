@@ -9,15 +9,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/calculators">Calculators</a>
                 </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="/fitness">Fitness</a>
+                    </li>
                 @if(Auth::check())
                     <li class="nav-item">
                         <a class="nav-link" href="/appointment">Appointments</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/medications">Medications</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/fitness">Fitness</a>
                     </li>
                 @endif
             </ul>

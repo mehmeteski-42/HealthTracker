@@ -64,7 +64,6 @@
                                 <th>İlaç Adı</th>
                                 <th>Alınma Zamanı</th>
                                 <th>Detaylı Bilgi</th>
-                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,10 +72,6 @@
                                     <td>{{ $medication->name }}</td>
                                     <td>{{ $medication->time }}</td>
                                     <td>{{ $medication->additional_notes }}</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm">Düzenle</button>
-                                        <button class="btn btn-danger btn-sm">Sil</button>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -85,6 +80,9 @@
             @else
                 <p class="text-muted">Henüz bir ilaç eklenmemiştir.</p>
             @endif
+        
+            <!-- Reminder Script -->
+            @include('partials.reminder')
         @else
             <div class="mt-5">
                 <a href="{{ route('loginAccount') }}" class="btn btn-primary btn-lg">Login</a>

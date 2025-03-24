@@ -117,6 +117,11 @@
             </div>
         </div>
     </div>
+
+    @if(Auth::check())
+        @include('partials.reminder')
+    @endif
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const calculateWaterBtn = document.getElementById("calculateWater");

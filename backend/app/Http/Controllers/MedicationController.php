@@ -12,12 +12,18 @@ class MedicationController extends Controller
     public function index()
     {
         if(Auth::check()){
+            $appointments = DB::table('appointments')
+            ->where('user_id', Auth::id())
+            ->orderBy('date', 'desc')
+            ->get();
+        }
+        if(Auth::check()){
             $medications = DB::table('medications')
                 ->where('user_id', Auth::id())
                 ->orderBy('time', 'asc')
                 ->get();
         }
-        return view('medications', compact('medications'));
+        return view('medications', compact('medications', 'appointments'));
     }
     public function store(Request $request)
     {
