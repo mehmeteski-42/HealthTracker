@@ -1,6 +1,5 @@
 <?php
 // routes/api.php
-use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AppointmentController;
@@ -8,7 +7,7 @@ use App\Http\Controllers\MedicationController;
 use Illuminate\Support\Facades\Route;
 
 // API rotaları '/api' prefix'i ile başlayacak
-Route::get('/welcome', [WelcomeController::class, 'index']);
+
 
 Route::post('/registerAccount', [RegisterController::class, 'store'])->name('registerAccount');
 Route::post('/loginAccount', [LoginController::class, 'log_in'])->name('loginAccount');

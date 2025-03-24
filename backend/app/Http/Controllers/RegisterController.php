@@ -17,7 +17,7 @@ class RegisterController extends Controller
     {
         // Form doğrulama
         $request->validate([
-            'name' => 'required|string|max:255|unique:users',
+            'name' => 'required|string|max:255'|'unique:users',
             'password' => 'required|string|confirmed',
         ]);
 
@@ -28,6 +28,9 @@ class RegisterController extends Controller
         ]);
 
         // Welcome sayfasına yönlendirme
-        return redirect('/')->with('success', 'Kayıt başarılı! Lütfen giriş yapın.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Kayıt başarılı! Lütfen giriş yapın.'
+        ]);
     }
 }

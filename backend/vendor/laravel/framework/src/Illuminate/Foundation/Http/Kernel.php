@@ -55,6 +55,7 @@ class Kernel implements KernelContract
      * @var array<int, class-string|string>
      */
     protected $middleware = [
+        \Fruitcake\Cors\HandleCors::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,  // CORS middleware
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
@@ -79,10 +80,13 @@ class Kernel implements KernelContract
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     
+        // app/Http/Kernel.php dosyasına ekleyin
         'api' => [
-            \Barryvdh\Cors\HandleCors::class,  // CORS middleware'ini buraya ekleyin
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Fruitcake\Cors\HandleCors::class,
+            'throttle:api',
+             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
     ];
     
 

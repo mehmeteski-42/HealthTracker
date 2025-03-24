@@ -40,7 +40,7 @@ class VerifyCsrfToken
      * @var array<int, string>
      */
     protected $except = ['api/loginAccount',   // Login için CSRF koruması devre dışı bırakıldı
-    'api/register','/login' ];
+    'api/register','/login', '/register', '/registerAccount', '/api/registerAccount' ];
 
     /**
      * The globally ignored URIs that should be excluded from CSRF verification.

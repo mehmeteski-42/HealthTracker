@@ -8,8 +8,8 @@ use App\Http\Controllers\MedicationController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('api')->group(function () {
 Route::get('/', [WelcomeController::class, 'index']);
+Route::prefix('api')->group(function () {
 
 Route::get('/registerAccount', [RegisterController::class, 'create'])->name('registerAccount');
 Route::post('/registerAccount', [RegisterController::class, 'store'])->name('registerAccount');
@@ -21,6 +21,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/appointment', [AppointmentController::class, 'store'])->name('appointments.store');
 Route::delete('/appointment/{id}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
 
+Route::get('/medications', [MedicationController::class, 'index'])->name('medications.index');
 Route::post('/medications', [MedicationController::class, 'store'])->name('medications.store');
 Route::delete('/medications/{id}', [MedicationController::class, 'destroy'])->name('medications.destroy');
 

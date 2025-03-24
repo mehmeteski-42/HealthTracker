@@ -39,7 +39,7 @@ class LoginController extends Controller
             // ... Oturum açma
             $request->session()->regenerate();
     
-            return redirect('/');    
+            return response()->json(['message' => 'Login successful']);
         }
     }
     public function logout(Request $request)
@@ -49,6 +49,9 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return response()->json([
+            'success' => true,
+        
+        ]);
     }
 }

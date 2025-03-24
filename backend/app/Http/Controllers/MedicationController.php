@@ -9,9 +9,17 @@ use App\Models\Medication;
 
 class MedicationController extends Controller
 {
+    public function index()
+{
+    // Retrieve medications for the authenticated user
+    $medications = Medication::where('user_id', Auth::id())->get();
+
+    // Return the medications as a JSON response
+    return response()->json($medications);
+}
     public function store(Request $request)
     {
-        // Validasyon
+    
         $request->validate([
             'medicationName' => 'required|string|max:100',
             'medicationTime' => 'required|date_format:H:i',
