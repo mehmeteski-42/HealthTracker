@@ -51,15 +51,21 @@
                 alert(reminderMessage);
             }
         @endif
+        
+    }
+    function waterReminder(){
+        let waterReminderMessage = "Su içmeyi unutmayın! Sağlıklı bir yaşam için düzenli su tüketimi önemlidir.";
+        alert(waterReminderMessage);
     }
 
     // Sayfa yüklendiğinde hemen kontrol et
     document.addEventListener('DOMContentLoaded', function () {
         checkReminder();
-
-        // Her 1 dakikada bir kontrol et
+        waterReminder();
 
         // 5000 ms = 5 saniye
+        // 1 dakika = 60000 ms
         setInterval(checkReminder, 300000); // 60000 ms = 1 dakika
+        setInterval(waterReminder, 3600000); // 3600000 ms = 1 saat
     });
 </script>
