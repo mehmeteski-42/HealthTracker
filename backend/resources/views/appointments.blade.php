@@ -197,7 +197,7 @@
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        alert(data.message);
+                        //alert(data.message);
                         appointmentModal.style.display = "none"; // Modal'ı kapat
                         location.reload(); // Sayfayı yenileyerek tabloyu güncelle
                     })

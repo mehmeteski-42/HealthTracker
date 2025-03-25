@@ -150,7 +150,7 @@
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        alert(data.message);
+                        //alert(data.message);
                         medicationModal.style.display = "none"; // Modal'ı kapat
                         location.reload(); // Sayfayı yenileyerek tabloyu güncelle
                     })
