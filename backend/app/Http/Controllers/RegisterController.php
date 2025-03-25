@@ -17,7 +17,7 @@ class RegisterController extends Controller
     {
         // Form doğrulama
         $request->validate([
-            'name' => 'required|string|max:255'|'unique:users',
+            'name' => 'required|string|max:255|unique:users',
             'password' => 'required|string|confirmed',
         ]);
 
