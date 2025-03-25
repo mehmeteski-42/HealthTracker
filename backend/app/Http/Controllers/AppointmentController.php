@@ -17,7 +17,13 @@ class AppointmentController extends Controller
             ->orderBy('date', 'desc')
             ->get();
         }
-        return view('appointments', compact('appointments'));
+        if(Auth::check()){
+            $medications = DB::table('medications')
+                ->where('user_id', Auth::id())
+                ->orderBy('time', 'asc')
+                ->get();
+        }
+        return view('appointments', compact('appointments', 'medications'));
 
     }
     public function store(Request $request)

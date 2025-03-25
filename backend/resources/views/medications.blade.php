@@ -97,6 +97,8 @@
                     </form>
                 </div>
             </div>
+
+            @include('partials.reminder')
         @else
             <a href="{{ route('loginAccount') }}" class="btn btn-primary">Login</a>
             <a href="{{ route('registerAccount') }}" class="btn btn-secondary">Register</a>
@@ -209,7 +211,7 @@
                         const updatedAdditionalNotes = document.getElementById("editAdditionalNotes").value;
 
                         // Boş alan kontrolü
-                        if (!updatedMedicationName || !updatedMedicationTime || !updatedAdditionalNotes) {
+                        if (!updatedMedicationName || !updatedMedicationTime) {
                             alert("Lütfen tüm alanları doldurun.");
                             return;
                         }
@@ -279,5 +281,5 @@
             });
         });
     </script>
-</body>
+<body>
 </html>

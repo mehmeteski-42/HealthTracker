@@ -88,8 +88,8 @@
                     <input type="number" id="swimWeight" class="form-control" placeholder="Kilonuzu girin" required>
                 </div>
                 <div class="mb-3">
-                    <label for="swimLaps" class="form-label">Yüzülen Metre Sayısı:</label>
-                    <input type="number" id="swimLaps" class="form-control" placeholder="Metre sayısını girin" required>
+                    <label for="swimMeters" class="form-label">Yüzülen Metre Sayısı:</label>
+                    <input type="number" id="swimMeters" class="form-control" placeholder="Metre sayısını girin" required>
                 </div>
                 <button type="button" id="submitSwimming" class="btn btn-primary">Okey</button>
             </form>
@@ -102,6 +102,10 @@
             <p id="rankText"></p>
         </div>
     </div>
+    
+    @if(Auth::check())
+        @include('partials.reminder')
+    @endif
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -193,10 +197,10 @@
             document.getElementById("submitSwimming").addEventListener("click", function () {
                 const gender = document.getElementById("swimGender").value;
                 const weight = parseFloat(document.getElementById("swimWeight").value);
-                const laps = parseInt(document.getElementById("swimLaps").value);
+                const meters = parseInt(document.getElementById("swimMeters").value);
 
                 // Form doğrulama
-                if (!gender || isNaN(weight) || isNaN(laps)) {
+                if (!gender || isNaN(weight) || isNaN(meters)) {
                     alert("Lütfen tüm alanları doldurun.");
                     return;
                 }
@@ -214,28 +218,5 @@
             });
         });
     </script>
-
 </body>
 </html>
-
-<!-- function calculateRank(gender, weight, reps) {
-                    let a = 0;
-                    let b = 0;
-                    let c = 0;
-
-                    if(gender == "male") {
-                        a = -0.000001093;
-                        b = 0.0007391293;
-                        c = -0.1918759221;
-                    } else {
-                        a = 0.000005116;
-                        b = -0.0005158568;
-                        c = -0.1126655495;
-                    }
-
-                    let lifted = (weight*0.7) * (1 + 0.3*reps);
-
-                    let rank = (100 / (a + b*weight + c*weight*weight))*lifted;
-
-                    alert(rank);
-                } -->
