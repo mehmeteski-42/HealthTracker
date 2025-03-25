@@ -23,7 +23,7 @@
                 reminderMessage += `Bölüm: ${nextAppointment.department}\n`;
                 reminderMessage += `Lokasyon: ${nextAppointment.location}\n`;
 
-                alert(reminderMessage);
+                //alert(reminderMessage);
             }
         @endif
         // Eğer ilaç varsa
@@ -48,14 +48,14 @@
                     reminderMessage += `Detaylı Bilgi: ${nextMedication.additional_notes}\n`;
                 }
 
-                alert(reminderMessage);
+                //alert(reminderMessage);
             }
         @endif
         
     }
     function waterReminder(){
         let waterReminderMessage = "Su içmeyi unutmayın! Sağlıklı bir yaşam için düzenli su tüketimi önemlidir.";
-        alert(waterReminderMessage);
+        //alert(waterReminderMessage);
     }
 
     // Sayfa yüklendiğinde hemen kontrol et

@@ -166,8 +166,6 @@
             deleteMedicationButtons.forEach((button) => {
                 button.addEventListener("click", function () {
                     const medicationId = this.getAttribute("data-id");
-
-                    if (confirm("Bu ilacı silmek istediğinize emin misiniz?")) {
                         fetch(`/medications/${medicationId}`, {
                             method: "DELETE",
                             headers: {
@@ -176,14 +174,13 @@
                         })
                             .then((response) => response.json())
                                 .then((data) => {
-                                    alert(data.message);
+                                    //alert(data.message);
                                     location.reload(); // Sayfayı yenileyerek tabloyu güncelle
                                 })
                                 .catch((error) => {
                                     console.error("Hata:", error);
-                                    alert("İlaç silinirken bir hata oluştu.");
+                                    //alert("İlaç silinirken bir hata oluştu.");
                                 });
-                    }
                 });
             });
 
@@ -214,7 +211,7 @@
 
                         // Boş alan kontrolü
                         if (!updatedMedicationName || !updatedMedicationTime) {
-                            alert("Lütfen tüm alanları doldurun.");
+                            //alert("Lütfen tüm alanları doldurun.");
                             return;
                         }
 
@@ -227,7 +224,7 @@
                         })
                             .then((response) => {
                                 if (!response.ok) {
-                                    alert("Randevu silme işlemi başarısız oldu.");
+                                    //alert("Randevu silme işlemi başarısız oldu.");
                                     throw new Error("Randevu silme işlemi başarısız oldu.");
                                 }
                                 return response.json();
@@ -251,7 +248,7 @@
                                     .then((response) => response.json())
                                     .then((data) => {
                                         if (data != null) {
-                                            alert(data.message);
+                                            //alert(data.message);
                                             editMedicationModal.style.display = "none";
                                             location.reload(); // Sayfayı yenileyerek tabloyu güncelle
                                         }
@@ -261,7 +258,7 @@
                                     })
                                     .catch((error) => {
                                         console.error("Hata1:", error);
-                                        alert("Hata1:" + error);
+                                        //alert("Hata1:" + error);
                                     });
                             })
                             .catch((error) => {

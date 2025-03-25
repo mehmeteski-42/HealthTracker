@@ -137,7 +137,7 @@
                 const activityLevel = document.getElementById("activityLevel").value;
 
                 if (!weight || weight <= 0 || !height || height <= 0 || !age || age <= 0) {
-                    alert("Lütfen geçerli değerler girin.");
+                    //alert("Lütfen geçerli değerler girin.");
                     return;
                 }
 
@@ -164,7 +164,7 @@
 
                 // Boş veya geçersiz değer kontrolü
                 if (isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0 || isNaN(age) || age <= 0) {
-                    alert("Lütfen geçerli değerler girin.");
+                    //alert("Lütfen geçerli değerler girin.");
                     return;
                 }
 
@@ -207,7 +207,7 @@
                 const height = parseFloat(document.getElementById("bmiHeight").value) / 100; // cm'yi metreye çevir
 
                 if (isNaN(weight) || weight <= 0 || isNaN(height) || height <= 0) {
-                    alert("Lütfen geçerli değerler girin.");
+                    //alert("Lütfen geçerli değerler girin.");
                     return;
                 }
 

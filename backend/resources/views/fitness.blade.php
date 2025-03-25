@@ -151,7 +151,7 @@
 
                 // Form doğrulama
                 if (!gender || isNaN(weight) || isNaN(reps)) {
-                    alert("Lütfen tüm alanları doldurun.");
+                    //alert("Lütfen tüm alanları doldurun.");
                     return;
                 }
 
@@ -179,7 +179,7 @@
 
                 // Form doğrulama
                 if (!gender || isNaN(weight) || isNaN(reps)) {
-                    alert("Lütfen tüm alanları doldurun.");
+                    //alert("Lütfen tüm alanları doldurun.");
                     return;
                 }
 
@@ -209,7 +209,7 @@
 
                 // Form doğrulama
                 if (!gender || isNaN(weight) || isNaN(meters)) {
-                    alert("Lütfen tüm alanları doldurun.");
+                    //alert("Lütfen tüm alanları doldurun.");
                     return;
                 }
 
