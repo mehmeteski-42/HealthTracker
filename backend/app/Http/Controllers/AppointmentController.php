@@ -37,7 +37,8 @@ class AppointmentController extends Controller
         ]);
         
         //TODO
-        return response()->json(['message' => 'Randevu başarıyla kaydedildi!']);
+        return response()->json(['message' => 'Randevu başarıyla kaydedildi!', 'user_id' => Auth::id()]);
+        
     }
     public function destroy($id)
     {

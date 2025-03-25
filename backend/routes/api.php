@@ -18,6 +18,10 @@ Route::post('/appointments/{id}', [AppointmentController::class, 'store']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 
-    Route::post('/medications', [MedicationController::class, 'store']);
-    Route::delete('/medications/{id}', [MedicationController::class, 'destroy']);
+    Route::get('/medications/{id}', [MedicationController::class, 'index'])->name('medications.index');
+    Route::post('/medications/{id}', [MedicationController::class, 'store'])->name('medications.store');
+    Route::get('/medications', [MedicationController::class, 'index'])->name('medications.index');
+    Route::post('/medications', [MedicationController::class, 'store'])->name('medications.store');
+    Route::delete('/medications/{id}', [MedicationController::class, 'destroy'])->name('medications.destroy');
+    
 });

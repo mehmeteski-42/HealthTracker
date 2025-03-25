@@ -39,7 +39,10 @@ class LoginController extends Controller
             // ... Oturum açma
             $request->session()->regenerate();
     
-            return response()->json(['message' => 'Login successful']);
+            return response()->json([
+                'message' => 'Login successful',
+                'user_id' => $user->id,  // Return user ID in the response
+            ]);
         }
     }
     public function logout(Request $request)
