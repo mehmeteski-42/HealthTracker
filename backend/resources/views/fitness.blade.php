@@ -153,7 +153,7 @@
                     return;
                 }
 
-                const exerciseMultiplier = 1.2; // Şınav: 1.2, Squat: 1.5
+                const exerciseMultiplier = 3; // Şınav: 3, Squat: 1.5
                 const genderMultiplier = gender === "male" ? 1.1 : 1.0; // Erkek: 1.1, Kadın: 1.0
                 const weightFactor = weight / 70; // 70 kg'ye göre normalize
 
@@ -181,7 +181,7 @@
                     return;
                 }
 
-                const exerciseMultiplier = 1.5; // Şınav: 1.2, Squat: 1.5
+                const exerciseMultiplier = 1.5; // Şınav: 3, Squat: 1.5
                 const genderMultiplier = gender === "male" ? 1.1 : 1.0; // Erkek: 1.1, Kadın: 1.0
                 const weightFactor = weight / 70; // 70 kg'ye göre normalize
 
@@ -190,7 +190,13 @@
 
                 // Sonuçları ekrana yazdır
                 resultText.textContent = `Cinsiyet: ${gender}, Kilo: ${weight} kg, Yapılan Squat Tekrarı: ${reps}`;
-                rankText.textContent = `Puanınız: ${score}/100`;
+                if (score < 100) {
+                    rankText.textContent = `Puanınız: ${score}/100`;
+                } else if (score >= 100 && score < 200) {
+                    rankText.textContent = `Puanınız: 100+/100`;
+                } else {
+                    rankText.textContent = `Puanınız: 100++/100`;
+                }
                 resultDiv.style.display = "block";
             });
             // Yüzme formu gönderildiğinde sonucu ve ranklamayı göster
@@ -205,15 +211,21 @@
                     return;
                 }
 
-                const exerciseMultiplier = 1.8; // Yüzme: 1.8
+                const exerciseMultiplier = 1; // Yüzme: 1
                 const genderMultiplier = gender === "male" ? 1.1 : 1.0; // Erkek: 1.1, Kadın: 1.0
                 const weightFactor = weight / 70; // 70 kg'ye göre normalize
 
-                let score = Math.pow(laps, 0.8) * exerciseMultiplier * weightFactor * genderMultiplier;
+                let score = Math.pow(meters, 0.8) * exerciseMultiplier * weightFactor * genderMultiplier;
 
                 // Sonuçları ekrana yazdır
-                resultText.textContent = `Cinsiyet: ${gender}, Kilo: ${weight} kg, Yüzülen Tur Sayısı: ${laps}`;
-                rankText.textContent = `Puanınız: ${score}/100`;
+                resultText.textContent = `Cinsiyet: ${gender}, Kilo: ${weight} kg, Yüzülen Metre Sayısı: ${meters}`;
+                if (score < 100) {
+                    rankText.textContent = `Puanınız: ${score}/100`;
+                } else if (score >= 100 && score < 200) {
+                    rankText.textContent = `Puanınız: 100+/100`;
+                } else {
+                    rankText.textContent = `Puanınız: 100++/100`;
+                }
                 resultDiv.style.display = "block";
             });
         });
