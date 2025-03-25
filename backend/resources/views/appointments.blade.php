@@ -6,6 +6,8 @@
     <title>Appointment Manager</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/modal.css') }}">
+    <!-- FRONTEND EKLENİNCE KALDIRILACAK-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     @include('navbar')
@@ -156,6 +158,17 @@
                 if (event.target === appointmentModal) {
                     appointmentModal.style.display = "none";
                 }
+                if (event.target === editModal) {
+                    editModal.style.display = "none";
+                }
+            });
+
+            // Esc tuşuna basıldığında modal'ı kapat
+            window.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+                    appointmentModal.style.display = "none";
+                    editModal.style.display = "none";
+                }
             });
 
             // Randevu kaydetme işlemi
@@ -303,7 +316,13 @@
                     };
                 });
             });
+            // Modal'ı kapat
+            closeEditModal.addEventListener("click", function () {
+                editMedicationModal.style.display = "none";
+            });
         });
     </script>
+    <!-- FRONTEND EKLENINCE KALDIRILACAK -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
