@@ -161,7 +161,13 @@
 
                 // Sonuçları ekrana yazdır
                 resultText.textContent = `Cinsiyet: ${gender}, Kilo: ${weight} kg, Yapılan Şınav Tekrarı: ${reps}`;
-                rankText.textContent = `Puanınız: ${score}/100`;
+                if (score < 100) {
+                    rankText.textContent = `Puanınız: ${score}/100`;
+                } else if (score >= 100 && score < 200) {
+                    rankText.textContent = `Puanınız: 100+/100`;
+                } else {
+                    rankText.textContent = `Puanınız: 100++/100`;
+                }
                 resultDiv.style.display = "block";
             });
             document.getElementById("submitSquat").addEventListener("click", function () {
